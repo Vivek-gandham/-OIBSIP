@@ -1,0 +1,102 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Book {
+    private String title;
+    private String author;
+    private String isbn;
+
+    public Book(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+}
+
+class Library {
+    private List<Book> books;
+
+    public Library() {
+        this.books = new ArrayList<>();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    public void displayBooks() {
+        System.out.println("Available Books:");
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            System.out.println((i + 1) + ". " + book.getTitle() + " by " + book.getAuthor());
+        }
+    }
+
+    public void searchBook(String title) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                System.out.println("Book found:");
+                System.out.println("Title: " + book.getTitle());
+                System.out.println("Author: " + book.getAuthor());
+                System.out.println("ISBN: " + book.getIsbn());
+                return;
+            }
+        }
+        System.out.println("Book not found.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Library library = new Library();
+
+        // Add books to the library
+        library.addBook(new Book("Java Programming", "John Smith", "123456789"));
+        library.addBook(new Book("Python Basics", "Jane Doe", "987654321"));
+        library.addBook(new Book("Data Structures and Algorithms", "Alice Johnson", "456789123"));
+
+        Scanner scanner = new Scanner(System.in);
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("\nDigital Library Management System");
+            System.out.println("1. Display All Books");
+            System.out.println("2. Search a Book");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    library.displayBooks();
+                    break;
+                case 2:
+                    System.out.print("Enter the book title: ");
+                    scanner.nextLine(); // Consume the newline character
+                    String title = scanner.nextLine();
+                    library.searchBook(title);
+                    break;
+                case 3:
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+        System.out.println("Exiting the Library Management System. Goodbye!");
+    }
+}
