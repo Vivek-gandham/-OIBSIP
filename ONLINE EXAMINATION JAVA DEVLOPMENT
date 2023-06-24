@@ -1,0 +1,111 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Question {
+    private String text;
+    private List<String> options;
+    private int correctOption;
+
+    public Question(String text, List<String> options, int correctOption) {
+        this.text = text;
+        this.options = options;
+        this.correctOption = correctOption;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public int getCorrectOption() {
+        return correctOption;
+    }
+}
+
+class Exam {
+    private String name;
+    private List<Question> questions;
+
+    public Exam(String name) {
+        this.name = name;
+        this.questions = new ArrayList<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void addQuestion(Question question) {
+        questions.add(question);
+    }
+}
+
+class ExamSystem {
+    private List<Exam> exams;
+
+    public ExamSystem() {
+        this.exams = new ArrayList<>();
+    }
+
+    public void addExam(Exam exam) {
+        exams.add(exam);
+    }
+
+    public void displayExams() {
+        System.out.println("Available Exams:");
+        for (int i = 0; i < exams.size(); i++) {
+            System.out.println((i + 1) + ". " + exams.get(i).getName());
+        }
+    }
+
+    public void startExam(Exam exam) {
+        int score = 0;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Starting Exam: " + exam.getName());
+
+        for (Question question : exam.getQuestions()) {
+            System.out.println(question.getText());
+            List<String> options = question.getOptions();
+            for (int i = 0; i < options.size(); i++) {
+                System.out.println((i + 1) + ". " + options.get(i));
+            }
+
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            if (choice == question.getCorrectOption()) {
+                score++;
+            }
+        }
+
+        System.out.println("Exam Completed. Your Score: " + score);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ExamSystem examSystem = new ExamSystem();
+
+        // Create exams and questions
+        Exam exam1 = new Exam("Java Basics");
+        exam1.addQuestion(new Question("What is the capital of India?", List.of("Delhi", "Mumbai", "Chennai", "Kolkata"), 1));
+        exam1.addQuestion(new Question("Which language is used for Android app development?", List.of("Java", "C++", "Python", "Ruby"), 1));
+
+        Exam exam2 = new Exam("Mathematics");
+        exam2.addQuestion(new Question("What is the square root of 25?", List.of("3", "4", "5", "6"), 3));
+        exam2.addQuestion(new Question("What is 10 multiplied by 5?", List.of("50", "25", "30", "15"), 1));
+
+        // Add exams to the system
+        examSystem.addExam(exam1);
+        examSystem.addExam(exam2);
+
+        // Display available exams
