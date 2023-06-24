@@ -1,0 +1,115 @@
+import java.util.Scanner;
+
+class Account {
+    private String accountNumber;
+    private String pin;
+    private double balance;
+
+    public Account(String accountNumber, String pin, double balance) {
+        this.accountNumber = accountNumber;
+        this.pin = pin;
+        this.balance = balance;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public boolean validatePin(String enteredPin) {
+        return pin.equals(enteredPin);
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrawal successful. Current balance: $" + balance);
+        } else {
+            System.out.println("Invalid withdrawal amount or insufficient balance.");
+        }
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposit successful. Current balance: $" + balance);
+        } else {
+            System.out.println("Invalid deposit amount.");
+        }
+    }
+}
+
+class ATM {
+    private Account account;
+
+    public ATM(Account account) {
+        this.account = account;
+    }
+
+    public void displayMenu() {
+        System.out.println("ATM Menu");
+        System.out.println("1. Check Balance");
+        System.out.println("2. Withdraw Money");
+        System.out.println("3. Deposit Money");
+        System.out.println("4. Quit");
+    }
+
+    public void processOption(int option) {
+        switch (option) {
+            case 1:
+                System.out.println("Current balance: $" + account.getBalance());
+                break;
+            case 2:
+                System.out.print("Enter the amount to withdraw: $");
+                double withdrawalAmount = scanner.nextDouble();
+                account.withdraw(withdrawalAmount);
+                break;
+            case 3:
+                System.out.print("Enter the amount to deposit: $");
+                double depositAmount = scanner.nextDouble();
+                account.deposit(depositAmount);
+                break;
+            case 4:
+                System.out.println("Thank you for using the ATM. Goodbye!");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                break;
+        }
+    }
+}
+
+public class Main {
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        // Create an account (replace with your own account details)
+        Account account = new Account("123456789", "1234", 1000.0);
+
+        // Create an ATM instance
+        ATM atm = new ATM(account);
+
+        // ATM login
+        System.out.println("Welcome to the ATM!");
+        System.out.print("Enter your account number: ");
+        String accountNumber = scanner.nextLine();
+        System.out.print("Enter your PIN: ");
+        String pin = scanner.nextLine();
+
+        if (accountNumber.equals(account.getAccountNumber()) && account.validatePin(pin)) {
+            System.out.println("Login successful!");
+            while (true) {
+                atm.displayMenu();
+                System.out.print("Enter your choice: ");
+                int option = scanner.nextInt();
+                atm.processOption(option);
+            }
+        } else {
+            System.out.println("Invalid account number or PIN. Exiting...");
+        }
+    }
+}
