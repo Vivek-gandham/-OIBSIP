@@ -1,0 +1,116 @@
+import java.util.Scanner;
+
+class Room {
+    private int roomNumber;
+    private boolean isReserved;
+
+    public Room(int roomNumber) {
+        this.roomNumber = roomNumber;
+        this.isReserved = false;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
+    }
+
+    public void reserve() {
+        isReserved = true;
+    }
+
+    public void cancelReservation() {
+        isReserved = false;
+    }
+}
+
+class ReservationSystem {
+    private Room[] rooms;
+
+    public ReservationSystem(int numberOfRooms) {
+        rooms = new Room[numberOfRooms];
+        for (int i = 0; i < numberOfRooms; i++) {
+            rooms[i] = new Room(i + 1);
+        }
+    }
+
+    public void displayAvailableRooms() {
+        System.out.println("Available Rooms:");
+        for (Room room : rooms) {
+            if (!room.isReserved()) {
+                System.out.println("Room " + room.getRoomNumber());
+            }
+        }
+        System.out.println();
+    }
+
+    public void reserveRoom(int roomNumber) {
+        Room room = getRoomByNumber(roomNumber);
+        if (room == null) {
+            System.out.println("Invalid room number. Please try again.");
+            return;
+        }
+
+        if (room.isReserved()) {
+            System.out.println("Room " + roomNumber + " is already reserved.");
+        } else {
+            room.reserve();
+            System.out.println("Room " + roomNumber + " has been reserved.");
+        }
+    }
+
+    public void cancelReservation(int roomNumber) {
+        Room room = getRoomByNumber(roomNumber);
+        if (room == null) {
+            System.out.println("Invalid room number. Please try again.");
+            return;
+        }
+
+        if (room.isReserved()) {
+            room.cancelReservation();
+            System.out.println("Reservation for room " + roomNumber + " has been canceled.");
+        } else {
+            System.out.println("Room " + roomNumber + " is not reserved.");
+        }
+    }
+
+    private Room getRoomByNumber(int roomNumber) {
+        for (Room room : rooms) {
+            if (room.getRoomNumber() == roomNumber) {
+                return room;
+            }
+        }
+        return null;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rooms in the hotel: ");
+        int numberOfRooms = scanner.nextInt();
+        ReservationSystem reservationSystem = new ReservationSystem(numberOfRooms);
+
+        while (true) {
+            System.out.println("1. Display available rooms");
+            System.out.println("2. Reserve a room");
+            System.out.println("3. Cancel a reservation");
+            System.out.println("4. Quit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    reservationSystem.displayAvailableRooms();
+                    break;
+                case 2:
+                    System.out.print("Enter the room number to reserve: ");
+                    int roomNumberToReserve = scanner.nextInt();
+                    reservationSystem.reserveRoom(roomNumberToReserve);
+                    break;
+                case 3:
+                    System.out.print("Enter the room number to cancel reservation: ");
+                    int roomNumberToCancel = scanner.nextInt();
